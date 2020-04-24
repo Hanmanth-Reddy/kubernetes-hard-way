@@ -1,0 +1,27 @@
+
+- name: Ensure etcd has been downloaded 
+  get_url: 
+      url: https://github.com/etcd-io/etcd/releases/download/v3.4.0/etcd-v3.4.0-linux-amd64.tar.gz
+      dest: /tmp 
+
+
+- name: Ensure tar has unarchived and binaries are moved to path location
+  unarchive: 
+      src: /tmp/etcd-v3.4.0-linux-amd64.tar.gz
+      dest: /usr/local/bin 
+      mode: 0755
+ 
+- name: Ensure etcd directories are created.
+  file: 
+    name: "{{item}}"
+    owner: root
+    group: root
+    state: directory 
+    mode: 0755
+  with_items: 
+      - [ "/etc/etcd", "/var/lib/etcd" ]
+
+- name: Ensure ectd config is copied
+  template: 
+    src:
+    dest: 
